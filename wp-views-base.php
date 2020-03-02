@@ -22,6 +22,9 @@ class WP_Views_Base {
 	/** @var array The plugin settings array. */
 	var $settings = array();
 	
+	/** @var array content types array */
+	var $content_types = array();
+	
 	/**
 	 * __construct
 	 *
@@ -44,6 +47,9 @@ class WP_Views_Base {
 		// WP Viws Post Type
 		$this->register_post_type();
 		add_filter( 'map_meta_cap', array( $this, 'map_meta_cap' ) , 10, 4 );
+
+		// WP Viws Content Types
+		$this->register_content_types();
 	}
 
 	/**
@@ -109,6 +115,21 @@ class WP_Views_Base {
 		}
 
 		return $caps;
+	}
+
+	/**
+	 * register_content_types
+	 *
+	 * Register available content types
+	 *
+	 * @since	1.0.0
+	 *
+	 * @param	void
+	 * @return	void
+	 */	
+	function register_content_types() {
+		$this->content_types[ 'post' ] = new WP_Views_Content_Type_Post();
+		$this->content_types[ 'taxonomy_term' ] = new WP_Views_Content_Type_Term();
 	}
 
 	/**

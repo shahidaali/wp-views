@@ -118,6 +118,9 @@ class WP_Views {
 	 */	
 	function constants() {
 		// Define constants.
+		if(!defined('WP_VIEWS_VERSION')) {
+			define( 'WP_VIEWS_VERSION', '1.0.0' );
+		}
 		if(!defined('WP_VIEWS_PATH')) {
 			define( 'WP_VIEWS_PATH', plugin_dir_path( __FILE__ ) );
 		}
@@ -148,6 +151,16 @@ class WP_Views {
 
 		// Include utility class.
 		include_once( WP_VIEWS_PATH . 'includes/wp-views-utility.php');
+
+		// Field Defination
+		include_once( WP_VIEWS_PATH . 'includes/fields/wp-views-field-base.php' );
+		include_once( WP_VIEWS_PATH . 'includes/fields/wp-views-field-numeric.php' );
+		include_once( WP_VIEWS_PATH . 'includes/fields/wp-views-field-text.php' );
+
+		// Content Types Defination
+		include_once( WP_VIEWS_PATH . 'includes/content-types/wp-views-content-type-base.php' );
+		include_once( WP_VIEWS_PATH . 'includes/content-types/wp-views-content-type-post.php' );
+		include_once( WP_VIEWS_PATH . 'includes/content-types/wp-views-content-type-term.php' );
 
 		// Include base class
 		include_once( WP_VIEWS_PATH . 'wp-views-base.php');

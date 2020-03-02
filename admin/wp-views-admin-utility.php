@@ -62,6 +62,36 @@ class WP_Views_Admin_Utility {
 
 		echo $button;
 	}
+
+	/**
+	 * get_post_types()
+	 *
+	 * Get registered post types
+	 *
+	 * @since	1.0.0
+	 *
+	 * @param	$post_id 
+	 * @return	post types
+	 */	
+	public static function get_post_types( $args = [], $output = 'objects', $operator = 'and' ) {		  
+		$post_types = get_post_types( $args, $output, $operator );
+		return apply_filters( 'wp_views_post_types', $post_types );
+	}
+
+	/**
+	 * get_taxonomies()
+	 *
+	 * Get registered taxonomies
+	 *
+	 * @since	1.0.0
+	 *
+	 * @param	$args: args array, $output: names|objects, $operator: fileter operator 
+	 * @return	post types
+	 */	
+	public static function get_taxonomies( $args = [], $output = 'objects', $operator = 'and' ) {		  
+		$taxonomies = get_taxonomies( $args, $output, $operator );
+		return apply_filters( 'wp_views_taxonomies', $taxonomies );
+	}
 }
 
 endif; // class_exists check

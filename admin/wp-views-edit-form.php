@@ -129,12 +129,12 @@ if ( $post ) :
 <div id="major-publishing-actions">
 
 <?php
-	if ( ! $post->initial() ) :
-		$delete_nonce = wp_create_nonce( 'wp-views-delete-view_' . $post_id );
-?>
-<div id="delete-action">
-	<input type="submit" name="wp-views-delete" class="delete submitdelete" value="<?php echo esc_attr( __( 'Delete', 'wp-views' ) ); ?>" <?php echo "onclick=\"if (confirm('" . esc_js( __( "You are about to delete this contact form.\n  'Cancel' to stop, 'OK' to delete.", 'wp-views' ) ) . "')) {this.form._wpnonce.value = '$delete_nonce'; this.form.action.value = 'delete'; return true;} return false;\""; ?> />
-</div><!-- #delete-action -->
+if ( ! $post->initial() ) :
+	$delete_nonce = wp_create_nonce( 'wp-views-delete-view_' . $post_id );
+	?>
+	<div id="delete-action">
+		<input type="submit" name="wp-views-delete" class="delete submitdelete" value="<?php echo esc_attr( __( 'Delete', 'wp-views' ) ); ?>" <?php echo "onclick=\"if (confirm('" . esc_js( __( "You are about to delete this contact form.\n  'Cancel' to stop, 'OK' to delete.", 'wp-views' ) ) . "')) {this.form._wpnonce.value = '$delete_nonce'; this.form.action.value = 'delete'; return true;} return false;\""; ?> />
+	</div><!-- #delete-action -->
 <?php endif; ?>
 
 <div id="publishing-action">
@@ -180,25 +180,70 @@ if ( $post ) :
 </div><!-- #postbox-container-1 -->
 
 <div id="postbox-container-2" class="postbox-container">
-<div id="view-editor">
-<div class="keyboard-interaction"><?php
-	echo sprintf(
-		/* translators: 1: ◀ ▶ dashicon, 2: screen reader text for the dashicon */
-		esc_html( __( '%1$s %2$s keys switch panels', 'wp-views' ) ),
-		'<span class="dashicons dashicons-leftright" aria-hidden="true"></span>',
-		sprintf(
-			'<span class="screen-reader-text">%s</span>',
-			/* translators: screen reader text */
-			esc_html( __( '(left and right arrow)', 'wp-views' ) )
-		)
-	);
-?></div>
+	<?php if ( $post->initial() ) : ?>
+		<div class="postbox">
+			<div class="inside">
+				<div class="wp__views__new_container">
+					<div class="wp__views_new_field">
+						<span class="label"><?php echo __( 'Show', 'wp-views' ); ?>:</span> 
+						<select name="content_type">
+							<?php foreach ($this->content_types as $key => $type) : ?>
+								<?php $selected = ($key == 'post') ? 'selected="selected"' : ''; ?>
+								<option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $type->label; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="wp__views_new_field">
+						<span class="label"><?php echo __( 'of type', 'wp-views' ); ?>:</span> 
+						<select name="post_type">
+							<?php foreach (WP_Views_Admin_Utility::get_post_types() as $key => $post_type) : ?>
+								<?php $selected = ($key == 'post') ? 'selected="selected"' : ''; ?>
+								<option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $post_type->label; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="wp__views_new_field">
+						<span class="label"><?php echo __( 'of type', 'wp-views' ); ?>:</span> 
+						<select name="taxonomy">
+							<?php foreach (WP_Views_Admin_Utility::get_taxonomies() as $key => $taxonomy) : ?>
+								<?php $selected = ($key == 'post') ? 'selected="selected"' : ''; ?>
+								<option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $taxonomy->label; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="wp__views_new_field">
+						<span class="label"><?php echo __( 'sorted by', 'wp-views' ); ?>:</span> 
+						<select name="sorted_by">
+							
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php else: ?>
+		<div id="wp__views__app">
+			<div class="wp__views_cols wp__views_cols_3 clearfix">
+				<div class="wp__views_col wp__views_col_1">
+					<!-- Display Title -->
+					<wp-views-display-title
+						panel-title="<?php echo esc_html( __( 'Title', 'wp-views' ) ); ?>"
+						display-title="<?php echo esc_html( __( 'Content', 'wp-views' ) ); ?>"
+					></wp-views-display-title>
 
-</div><!-- #view-editor -->
+					<!-- Display Format -->
+					<wp-views-display-format
+						panel-title="<?php echo esc_html( __( 'Format', 'wp-views' ) ); ?>"
+						display-format="Table"
+						setting-text="<?php echo esc_html( __( 'Settings', 'wp-views' ) ); ?>"
+					></wp-views-display-format>
+				</div>
+			</div>
+		</div><!-- #view-editor -->
+	<?php endif; ?>
 
-<?php if ( current_user_can( 'wp_views_edit_view', $post_id ) ) : ?>
-<p class="submit"><?php WP_Views_Admin_Utility::admin_save_button( $post_id ); ?></p>
-<?php endif; ?>
+	<?php if ( current_user_can( 'wp_views_edit_view', $post_id ) ) : ?>
+		<p class="submit"><?php WP_Views_Admin_Utility::admin_save_button( $post_id ); ?></p>
+	<?php endif; ?>
 
 </div><!-- #postbox-container-2 -->
 
@@ -210,6 +255,5 @@ if ( $post ) :
 <?php endif; ?>
 
 </div><!-- .wrap -->
-
 <?php
 do_action( 'wp_views_admin_footer', $post );

@@ -82,8 +82,17 @@ class WP_Views_Admin extends WP_Views_Base {
 	 * @return	void
 	 */	
 	function enqueue_scripts() {
-		wp_register_script( 'wp-views-admin-script', WP_VIEWS_URL . 'admin/assets/js/admin.js', array('jquery'), null, true );
-		wp_localize_script( 'wp-views-admin-script', 'wp_views', array( 'ajax_url' => admin_url('admin-ajax.php'), 'check_nonce' => wp_create_nonce('wp-views-ajax-nonce')) );
+		// Vue JS APP & Components
+		wp_enqueue_script( 'wp-views-admin-vuejs', WP_VIEWS_URL . 'admin/assets/js/vue.js', array(), WP_VIEWS_VERSION, true );
+		wp_enqueue_script( 'wp-views-admin-vuejs-components', WP_VIEWS_URL . 'admin/assets/js/vue-components.js', array(), WP_VIEWS_VERSION, true );
+		wp_enqueue_script( 'wp-views-admin-vuejs-app', WP_VIEWS_URL . 'admin/assets/js/vue-app.js', array(), WP_VIEWS_VERSION, true );
+		
+		// Admin Scripts
+		wp_enqueue_style( 'wp-views-admin-style', WP_VIEWS_URL . 'admin/assets/css/admin.css', array(), WP_VIEWS_VERSION );
+		wp_register_script( 'wp-views-admin-script', WP_VIEWS_URL . 'admin/assets/js/admin.js', array(), WP_VIEWS_VERSION, true );
+		wp_localize_script( 'wp-views-admin-script', 'wp_views_settings', array( 'ajax_url' => admin_url('admin-ajax.php'), 'wp_views_ajax_nonce' => wp_create_nonce('wp-views-ajax-nonce')) );
+
+		// Enqueue scripts
 		wp_enqueue_script( 'wp-views-admin-script' );
 	}
 	
